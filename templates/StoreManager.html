@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Store Manager</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script>
+   
+
+  </script>
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Store Manager</a>
+
+
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container-fluid" style="
+  margin-left: 0px;
+  margin-right: 0px;
+">
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <h1 class="mt-5">Tasks</h1>
+        <div>
+          <table class="table table-striped" id="Main-table">
+            <thead>
+              <tr>
+                <th>Task title</th>
+                <th>Priority</th>
+                <th>Creation Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-6 text-center">
+        <h1 class="mt-5">Create a new Task</h1>
+        <div class="centerd">
+
+
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Task Title</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="title" placeholder="Title of the Task">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Priority</label>
+            <div class="col-sm-3">
+              <select class="form-control" id="Priority">
+                <option value='3'>HIGH</option>
+                <option value='2'>MEDIUM</option>
+                <option value='1'>LOW</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">State</label>
+            <div class="col-sm-3">
+              <select class="form-control" id="TaskState">
+                <option>New</option>
+                <option>Accepted</option>
+                <option>Completed</option>
+                <option>Declined</option>
+                <option>Cancelled</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <button type="submit" id="submit-btn" class="btn btn-success">Create New Task</button>
+            <button class="btn btn-info" type="reset">Reset</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+    integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
+    crossorigin="anonymous"></script>
+
+  <script>
+    // console.log(rowData);
+    var roomName = 'TaskStore';
+    var userName = 'akshat';
+    var deleteTask = ''
+    var chatSocket = new WebSocket(
+      'ws://' + window.location.host +
+      '/ws/chat/' + roomName + '/');
+    filltable();
+    function filltable() {
+      $('#Main-table').find('tbody').empty();
+      var xmlHttp = new XMLHttpRequest();
+      var theUrl = 'http://127.0.0.1:8000/api/getmytasks/akshat/';
+      xmlHttp.open("GET", theUrl, false); // false for synchronous request
+      xmlHttp.send(null);
+    var rowData = JSON.parse(xmlHttp.responseText)
+      if (!jQuery.isEmptyObject(rowData)) {
+      var count = Object.keys(rowData).length;
+      for (let index = 0; index < count; index++) {
+        var newData = rowData[index];
+        var taskPriority = '';
+        if (newData['priority'] == '1') {
+          taskPriority = 'LOW'
+        } else if (newData['priority'] == '2') {
+          taskPriority = 'MEDIUM'
+        } else if (newData['priority'] == '3') {
+          taskPriority = 'HIGH'
+        }
+        var Action = '';
+        console.log(newData['task_status'])
+        if (newData['task_status'] == 'New') {
+          console.log("New")
+          Action = '<button type="button" class="btn btn-danger" onClick=\'CancelTask("'+newData['title']+'")\'">Cancel Task</button>';
+        }
+
+       
+        $('#Main-table').find('tbody').append(' <tr><td>' + newData['title'] + '</td><td>' + taskPriority + '</td> <td>' + newData['creation_date'] + '</td> <td>' + newData['task_status'] + '</td><td>' + Action + '</td></tr>');
+
+      }
+    }
+    }
+
+
+    // var chatSocket = new WebSocket(
+    //   'ws://' + window.location.host +
+    //   '/ws/chat/' + roomName + '/');
+    function CancelTask(id) {
+      console.log("Task Id "+id);
+
+
+      var xhr = new XMLHttpRequest();
+        var url = "http://127.0.0.1:8000/api/deleteTask";
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var json = JSON.parse(xhr.responseText);
+                console.log(json);
+
+                chatSocket.send(JSON.stringify({
+        'message': 'Refresh Task',
+        'from': 'Store',
+
+      }));
+
+      console.log({
+        'message': 'Refresh Task',
+        'from': 'Store',
+
+      });
+
+
+
+            }
+        };
+        var dataPost = JSON.stringify({"TaskId":id});
+        xhr.send(dataPost);
+        // console.log(JSON.parse(xhr.responseText));
+
+
+       
+    }
+
+
+
+
+
+
+   
+    // console.log(chatSocket);
+    // console.log("=====>> " + chatSocket.readyState)
+    chatSocket.onmessage = function (e) {
+      var data = JSON.parse(e.data);
+      var message = data['message'];
+      // document.querySelector('#chat-log').value += (message + '\n');
+      console.log(data)
+      if(message=='DeclinedNotification'){
+        alert("Your task "+data['title']+"is declined by the delivery agent "+data['acceptedBy']);
+      }
+
+
+
+
+
+      filltable();
+      if (data['task_status'] == 'Accepted' && data['acceptedBy'] != '') {
+        // console("Your Task is accepted by "+data['acceptedBy'])
+        alert("Your Task " + data['title'] + " is accepted by " + data['acceptedBy']);
+
+      }
+
+    };
+
+    chatSocket.onclose = function (e) {
+      console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#submit-btn').focus();
+    document.querySelector('#submit-btn').onkeyup = function (e) {
+      if (e.keyCode === 13) {  // enter, return
+        document.querySelector('#submit-btn').click();
+      }
+    };
+
+    document.querySelector('#submit-btn').onclick = function (e) {
+      var date = new Date();
+      var timestamp = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+
+      var messageInputDom = document.querySelector('#title');
+      var title = messageInputDom.value;
+      var messageInputDom = document.querySelector('#Priority');
+      var Priority = messageInputDom.value;
+      var messageInputDom = document.querySelector('#TaskState');
+      var TaskState = messageInputDom.value;
+      var createdBy = '{'
+      chatSocket.send(JSON.stringify({
+        'message': 'Testing',
+        'title': title,
+        'Priority': Priority,
+        'task_status': TaskState,
+        'creationDate': timestamp,
+        'createdBy': userName,
+        'from': 'Store',
+        'acceptedBy': ''
+      }));
+
+      console.log(JSON.stringify({
+        'message': 'Testing',
+        'title': title,
+        'Priority': Priority,
+        'task_status': TaskState,
+        'creationDate': timestamp,
+        'createdBy': userName,
+        'acceptedBy': ''
+      }));
+
+      if (Priority == '1') {
+        taskPriority = 'LOW'
+      } else if (Priority == '2') {
+        taskPriority = 'MEDIUM'
+      } else if (Priority == '3') {
+        taskPriority = 'HIGH'
+      }
+
+      Action = '<button type="button" class="btn btn-danger" onClick=\'CancelTask("'+title+'")\' >Cancel Task</button>';
+
+      deleteTask = title;
+
+
+
+      $('#Main-table').find('tbody').append(' <tr><td>' + title + '</td><td>' + taskPriority + '</td> <td>' + timestamp + '</td> <td>' + TaskState + '</td><td>' + Action + '</td></tr>');
+
+
+
+     
+
+      // filltable();
+
+
+
+    };
+  </script>
+  <!-- Bootstrap core JavaScript -->
+
+</body>
+
+</html>
