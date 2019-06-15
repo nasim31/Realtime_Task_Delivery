@@ -20,11 +20,11 @@ engine = psycopg2.connect(
 def login(request):
     return render(request,'Login.html')
 
-def manager(request):
-    return render(request,'StoreManager.html')
+def manager(request,username):
+    return render(request,'StoreManager.html',{"Username":username})
 
-def delivery(request):
-    return render(request,'Delivery.html')
+def delivery(request,username):
+    return render(request,'Delivery.html',{"Username":username})
 
 def index(request):
     return render(request, 'index.html', {})
@@ -79,5 +79,28 @@ def deleteTask(request):
         engine.commit()
         cur.close()
         return JsonResponse({"Status":"DONE"},safe=False)
+    else:
+        return JsonResponse({})
+
+def loginApi(request):
+    if request.method == "POST":
+        res = json.loads(request.body.decode("utf-8"))
+        cur = engine.cursor(cursor_factory=RealDictCursor)
+        cur.execute("select usrtype from users where username = '"+res['username']+"' and pass ='"+res['Password']+"' limit 1 ")
+        result = cur.fetchall()
+        cur.close()
+        if(len(result)>0):
+            print(result[0])
+            newresult = json.loads(json.dumps(result[0]))
+            
+            typeOfUser = newresult["usrtype"]
+            if(typeOfUser == 'Manager'):
+                url = 'http://127.0.0.1:8000/manager/'+res['username']+'/'
+                return JsonResponse({"url":url},safe=False)
+            else:
+                url = 'http://127.0.0.1:8000/delivery/'+res['username']+'/'
+                return JsonResponse({"url":url},safe=False)
+        else:
+            return JsonResponse({})
     else:
         return JsonResponse({})

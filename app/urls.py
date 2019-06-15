@@ -8,10 +8,11 @@ from . import views
 
 urlpatterns = [
 	url(r'^login$',views.login,name='Main Page'),
-    url(r'^manager$',views.manager,name='Main Page'),
-    url(r'^delivery$',views.delivery,name='Main Page'),
+    url(r'^manager/(?P<username>[^/]+)/$',views.manager,name='Main Page'),
+    url(r'^delivery/(?P<username>[^/]+)/$',views.delivery,name='Main Page'),
     url(r'^api/getnexttask',views.getNextTask,name='api'),
     url(r'^api/deleteTask',views.deleteTask,name='api'),
+    url(r'^api/login',views.loginApi,name='api'),
     url(r'^api/getmytasksquota/(?P<username>[^/]+)/$',views.getmytasksquota,name='api'),
     url(r'^api/getmytasks/(?P<username>[^/]+)/$',views.getMyTaks,name='api'),
     url(r'^$', views.login, name='index'),

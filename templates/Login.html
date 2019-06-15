@@ -1,79 +1,162 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
-  
-  
-  <link rel='stylesheet' href='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css'>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap Login Form with Avatar Image</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style type="text/css">
+    body {
+      color: #fff;
+      background: #494848;
+    }
 
-      <link rel="stylesheet" href="./style.css">
+    .form-control {
+      min-height: 41px;
+      background: #fff;
+      box-shadow: none !important;
+      border-color: #e3e3e3;
+    }
 
-  
+    .form-control:focus {
+      border-color: #70c5c0;
+    }
+
+    .form-control,
+    .btn {
+      border-radius: 2px;
+    }
+
+    .login-form {
+      width: 350px;
+      margin: 0 auto;
+      padding: 100px 0 30px;
+    }
+
+    .login-form form {
+      color: #7a7a7a;
+      border-radius: 2px;
+      margin-bottom: 15px;
+      font-size: 13px;
+      background: #ececec;
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+      padding: 30px;
+      position: relative;
+    }
+
+    .login-form h2 {
+      font-size: 22px;
+      margin: 35px 0 25px;
+    }
+
+    .login-form .avatar {
+      position: absolute;
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+      top: -50px;
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      z-index: 9;
+      background: #70c5c0;
+      padding: 15px;
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-form .avatar img {
+      width: 100%;
+    }
+
+    .login-form input[type="checkbox"] {
+      margin-top: 2px;
+    }
+
+    .login-form .btn {
+      font-size: 16px;
+      font-weight: bold;
+      background: #70c5c0;
+      border: none;
+      margin-bottom: 20px;
+    }
+
+    .login-form .btn:hover,
+    .login-form .btn:focus {
+      background: #50b8b3;
+      outline: none !important;
+    }
+
+    .login-form a {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .login-form a:hover {
+      text-decoration: none;
+    }
+
+    .login-form form a {
+      color: #7a7a7a;
+      text-decoration: none;
+    }
+
+    .login-form form a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
-<style>
-body {
-  background: #eee !important;
-}
 
-.wrapper {
-  margin-top: 80px;
-  margin-bottom: 80px;
-}
-
-.form-signin {
-  max-width: 380px;
-  padding: 15px 35px 45px;
-  margin: 0 auto;
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-.form-signin .form-signin-heading,
-.form-signin .checkbox {
-  margin-bottom: 30px;
-}
-.form-signin .checkbox {
-  font-weight: normal;
-}
-.form-signin .form-control {
-  position: relative;
-  font-size: 16px;
-  height: auto;
-  padding: 10px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-.form-signin input[type="text"] {
-  margin-bottom: -1px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.form-signin input[type="password"] {
-  margin-bottom: 20px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-</style>
 <body>
+  <h1 class="text-center">Task Management System</h1>
+  <div class="login-form">
 
-    <div class="wrapper">
-    <form class="form-signin">       
-      <h2 class="form-signin-heading">Please login</h2>
-      <input type="text" class="form-control" name="username" placeholder="Email Address" required="" autofocus="" />
-      <br>
-      <input type="password" class="form-control" name="password" placeholder="Password" required=""/>      
-      
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>   
+    <form action="javascript:myFunction(){return false;}">
+      <div class="avatar">
+        <img src="https://www.tutorialrepublic.com/examples/images/avatar.png" alt="Avatar">
+      </div>
+      <h2 class="text-center">Member Login</h2>
+      <div class="form-group">
+        <input type="text" class="form-control" name="username" id="username" paceholder="Username" required="required">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" name="password" id="password" placeholder="Password"
+          required="required">
+      </div>
+      <div class="form-group">
+        <button id="submit-btn" class="btn btn-primary btn-lg btn-block">Sign in</button>
+      </div>
     </form>
   </div>
-  
-  
-
 </body>
+
+<script>
+  document.querySelector('#submit-btn').onclick = function (e) {
+    var messageInputDom = document.querySelector('#username');
+    var userName = messageInputDom.value;
+    var messageInputDom = document.querySelector('#password');
+    var Password = messageInputDom.value;
+
+    if (userName != "" && Password != "") {
+
+      var xhr = new XMLHttpRequest();
+      var url = "http://127.0.0.1:8000/api/login";
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var json = JSON.parse(xhr.responseText);
+          window.location.replace(json['url']);
+        }
+      };
+      var dataPost = JSON.stringify({"username":userName , "Password":Password});
+        xhr.send(dataPost);
+    }
+  }
+</script>
 
 </html>
