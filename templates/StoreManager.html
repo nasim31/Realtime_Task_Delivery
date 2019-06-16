@@ -109,7 +109,7 @@
   <script>
     // console.log(rowData);
     var roomName = 'TaskStore';
-    var userName = 'akshat';
+    var userName = '{{ Username }}';
     var deleteTask = ''
     var chatSocket = new WebSocket(
       'ws://' + window.location.host +
@@ -118,7 +118,7 @@
     function filltable() {
       $('#Main-table').find('tbody').empty();
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://127.0.0.1:8000/api/getmytasks/akshat/';
+      var theUrl = 'http://127.0.0.1:8000/api/getmytasks/'+userName+'/';
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
     var rowData = JSON.parse(xmlHttp.responseText)
@@ -202,7 +202,7 @@
       var message = data['message'];
       // document.querySelector('#chat-log').value += (message + '\n');
       console.log(data)
-      if(message=='DeclinedNotification'){
+      if(message=='DeclinedNotification' && data['createdby'] == userName ){
         alert("Your task "+data['title']+"is declined by the delivery agent "+data['acceptedBy']);
       }
 
@@ -211,11 +211,11 @@
 
 
       filltable();
-      if (data['task_status'] == 'Accepted' && data['acceptedBy'] != '') {
-        // console("Your Task is accepted by "+data['acceptedBy'])
-        alert("Your Task " + data['title'] + " is accepted by " + data['acceptedBy']);
+      // if (data['task_status'] == 'Accepted' && data['acceptedBy'] != '') {
+      //   // console("Your Task is accepted by "+data['acceptedBy'])
+      //   alert("Your Task " + data['title'] + " is accepted by " + data['acceptedBy']);
 
-      }
+      // }
 
     };
 

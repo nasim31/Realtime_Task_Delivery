@@ -132,6 +132,7 @@ class ChatConsumer(WebsocketConsumer):
             priority = text_data_json['Priority']
             creationDate = text_data_json['creationDate']
             by = text_data_json['acceptedBy']
+            createdby = text_data_json['createdBy']
             Status = text_data_json['task_status']
             # Send message to room group
             async_to_sync(self.channel_layer.group_send)(
@@ -143,7 +144,8 @@ class ChatConsumer(WebsocketConsumer):
                     'priority': priority,
                     'creationDate': creationDate,
                     'task_status': Status,
-                    'acceptedBy': by
+                    'acceptedBy': by,
+                    'createdby':createdby
                 }
             )
         elif(text_data_json['from'] == 'DeliveryAgent'):
@@ -164,7 +166,8 @@ class ChatConsumer(WebsocketConsumer):
                             'priority': '',
                             'creationDate': '',
                             'task_status': '',
-                            'acceptedBy': text_data_json['acceptedBy']
+                            'acceptedBy': text_data_json['acceptedBy'],
+                            'createdby':text_data_json['createdby']
                         }
                         )
                 else:
@@ -181,7 +184,8 @@ class ChatConsumer(WebsocketConsumer):
                             'priority': '',
                             'creationDate': '',
                             'task_status': '',
-                            'acceptedBy': ''
+                            'acceptedBy': '',
+                            'createdby':''
                     })
                 
             else:
@@ -204,6 +208,7 @@ class ChatConsumer(WebsocketConsumer):
                         'creationDate': str(res[0]['creation_date']),
                         'task_status': str(res[0]['task_status']),
                         'acceptedBy': str(res[0]['acceptedby']),
+                        'createdby' : str(res[0]['createdby'])
                     }))
                     async_to_sync(self.channel_layer.group_send)(
                         self.room_group_name,
@@ -215,6 +220,7 @@ class ChatConsumer(WebsocketConsumer):
                         'creationDate': str(res[0]['creation_date']),
                         'task_status': str(res[0]['task_status']),
                         'acceptedBy': str(res[0]['acceptedby']),
+                        'createdby' : str(res[0]['createdby'])
                     }
                     )
                 else:
@@ -227,7 +233,8 @@ class ChatConsumer(WebsocketConsumer):
                         'priority': '',
                         'creationDate': '',
                         'task_status': '',
-                        'acceptedBy': ''
+                        'acceptedBy': '',
+                        'createdby' : ''
                     }
                     )
         # message = text_data_json['message']
@@ -243,6 +250,7 @@ class ChatConsumer(WebsocketConsumer):
         creationDate = event['creationDate']
         Status = event['task_status']
         by = event['acceptedBy']
+        createdby = event['createdby']
         print("", event)
 
         # Send message to WebSocket
@@ -252,5 +260,6 @@ class ChatConsumer(WebsocketConsumer):
             'priority': priority,
             'creationDate': creationDate,
             'task_status': Status,
-            'acceptedBy': by
+            'acceptedBy': by,
+            'createdby':createdby
         }))
