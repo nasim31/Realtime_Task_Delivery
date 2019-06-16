@@ -132,7 +132,7 @@
 
     function getTaskQuota() {
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://127.0.0.1:8000/api/getmytasksquota/'+userName+'/';
+      var theUrl = 'http://3.83.129.144:8000/api/getmytasksquota/'+userName+'/';
       console.log("URL "+theUrl);
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
@@ -142,7 +142,7 @@
 
     function filltable() {
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://127.0.0.1:8000/api/getmytasks/'+userName+'/';
+      var theUrl = 'http://3.83.129.144:8000/api/getmytasks/'+userName+'/';
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
       $('#Main-table').find('tbody').empty();
@@ -234,7 +234,7 @@ var dataArr = data.split('#');
       if(taskQuota<3){
 
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://127.0.0.1:8000/api/getnexttask';
+      var theUrl = 'http://3.83.129.144:8000/api/getnexttask';
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
       var rowDataTask = JSON.parse(xmlHttp.responseText)
@@ -276,7 +276,7 @@ var dataArr = data.split('#');
 
 
 
-    var chatSocket = new WebSocket('ws://127.0.0.1:8000/ws/chat/TaskStore/');
+    var chatSocket = new WebSocket('ws://3.83.129.144:8000/ws/chat/TaskStore/');
     // console.log(chatSocket);
     console.log("=====>> " + chatSocket.readyState)
     chatSocket.onmessage = function (e) {

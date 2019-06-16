@@ -118,7 +118,7 @@
     function filltable() {
       $('#Main-table').find('tbody').empty();
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://127.0.0.1:8000/api/getmytasks/'+userName+'/';
+      var theUrl = 'http://3.83.129.144:8000/api/getmytasks/'+userName+'/';
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
     var rowData = JSON.parse(xmlHttp.responseText)
@@ -157,7 +157,7 @@
 
 
       var xhr = new XMLHttpRequest();
-        var url = "http://127.0.0.1:8000/api/deleteTask";
+        var url = "http://3.83.129.144:8000/api/deleteTask";
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onreadystatechange = function () {
