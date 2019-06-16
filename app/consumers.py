@@ -75,6 +75,7 @@ class ChatConsumer(WebsocketConsumer):
                         'creationDate': str(res[0]['creation_date']),
                         'task_status': str(res[0]['task_status']),
                         'acceptedBy': str(res[0]['acceptedby']),
+                        'createdby' : str(res[0]['createdby'])
                     }))
                     async_to_sync(self.channel_layer.group_send)(
                         self.room_group_name,
@@ -86,6 +87,7 @@ class ChatConsumer(WebsocketConsumer):
                         'creationDate': str(res[0]['creation_date']),
                         'task_status': str(res[0]['task_status']),
                         'acceptedBy': str(res[0]['acceptedby']),
+                         'createdby' : str(res[0]['createdby'])
                     }
                     )
                 else:
@@ -97,6 +99,7 @@ class ChatConsumer(WebsocketConsumer):
                         'creationDate': '',
                         'task_status': '',
                         'acceptedBy': '',
+                        'createdby' : ''
                     }))
                     async_to_sync(self.channel_layer.group_send)(
                         self.room_group_name,
@@ -108,6 +111,7 @@ class ChatConsumer(WebsocketConsumer):
                         'creationDate': '',
                         'task_status': '',
                         'acceptedBy': '',
+                        'createdby' : ''
                     }
                     )
 
