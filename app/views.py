@@ -95,10 +95,10 @@ def loginApi(request):
             
             typeOfUser = newresult["usrtype"]
             if(typeOfUser == 'Manager'):
-                url = 'http://127.0.0.1:8000/manager/'+res['username']+'/'
+                url = 'http://3.83.129.144:8000/manager/'+res['username']+'/'
                 return JsonResponse({"url":url},safe=False)
             else:
-                url = 'http://127.0.0.1:8000/delivery/'+res['username']+'/'
+                url = 'http://3.83.129.144:8000/delivery/'+res['username']+'/'
                 return JsonResponse({"url":url},safe=False)
         else:
             return JsonResponse({})
