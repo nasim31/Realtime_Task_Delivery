@@ -40,7 +40,7 @@ class ChatConsumer(WebsocketConsumer):
         if(text_data_json['from'] == 'Store'):
             if(text_data_json['message']=='Refresh Task'):
                 cur = engine.cursor(cursor_factory=RealDictCursor)
-                cur.execute("select * from task where task_status = 'New' order by  creation_date , priority  desc limit 1; ")
+                cur.execute("select * from task where task_status = 'New' order by  creation_date  desc , priority desc limit 1; ")
                 res = cur.fetchall()
                 cur.close()
                
