@@ -20,18 +20,6 @@ def callback(ch, method, properties, body):
     print(body.decode("utf-8"), end="\n")
 
 
-# url='amqp://dqxicnva:hzg8PpxVCRpqUFiOVL5fWV0O-kW9kfnt@llama.rmq.cloudamqp.com/dqxicnva'
-# params = pika.URLParameters(url)
-# connection = pika.BlockingConnection(params)
-# channel = connection.channel()
-# channel.queue_declare(queue='hello')
-# channel.basic_consume(queue='hello',auto_ack=True,on_message_callback=callback)
-# print("Starting to Consume on queue hello")
-# channel.start_consuming()
-
-# ws = create_connection("ws://localhost:8080/websocket")
-
-
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -45,29 +33,19 @@ class ChatConsumer(WebsocketConsumer):
 
         self.accept()
 
-        # self.send(text_data=json.dumps({
-        #     'message': 'Welcome Users'
-        # }))
-
-    # def disconnect(self, close_code):
-    #     # Leave room group
-    #     async_to_sync(self.channel_layer.group_discard)(
-    #         self.room_group_name,
-    #         self.channel_name
-    #     )
-
+     
     # Receive message from WebSocket
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         if(text_data_json['from'] == 'Store'):
             if(text_data_json['message']=='Refresh Task'):
                 cur = engine.cursor(cursor_factory=RealDictCursor)
-                cur.execute("select * from task where task_status = 'New' order by priority desc limit 1; ")
+                cur.execute("select * from task where task_status = 'New' order by  creation_date , priority  desc limit 1; ")
                 res = cur.fetchall()
                 cur.close()
-                print('Refresh Task request ',len(res))
+               
                 if(len(res)>0):
-                    print("******************length > 0*************************")
+                    
                     self.send(text_data=json.dumps({
                         'message': "Next High Task",
                         'title': str(res[0]['title']),
@@ -91,7 +69,7 @@ class ChatConsumer(WebsocketConsumer):
                     }
                     )
                 else:
-                    print("******************length = 0*************************")
+                   
                     self.send(text_data=json.dumps({
                         'message': "Next High Task",
                         'title': '',
@@ -128,9 +106,9 @@ class ChatConsumer(WebsocketConsumer):
                 engine.commit()
                 cur.close()
                 # pika.close()
-                print("heyy msg send "+text_data_json['message'])
+               
         elif(text_data_json['from'] == 'RabbitMQ'):
-            print("new Task is here ")
+            print("new Task is here from RabbitMQ")
             message = text_data_json['message']
             title = text_data_json['title']
             priority = text_data_json['Priority']
@@ -154,7 +132,6 @@ class ChatConsumer(WebsocketConsumer):
             )
         elif(text_data_json['from'] == 'DeliveryAgent'):
             if (text_data_json['message']=='Task Update'):
-                print("TASK UPDATEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
                 
                 if(text_data_json['Status']=='New'):
                     cur = engine.cursor()
@@ -193,12 +170,12 @@ class ChatConsumer(WebsocketConsumer):
                     })
                 
             else:
-                print("Accept TASK requestttttttttttttttttttttttttttttttt")
+                
                 cur = engine.cursor()
                 cur.execute("update task set task_status='Accepted' , acceptedby = '"+str(text_data_json['acceptedBy'])+"' where title = '"+str(text_data_json['title'])+"'")
                 engine.commit()
                 cur.close()
-                print("Got Message from DeliveryAgent")
+                print("Got task update Message from DeliveryAgent")
                 cur = engine.cursor(cursor_factory=RealDictCursor)
                 cur.execute("select * from task where task_status = 'New' order by priority desc limit 1; ")
                 res = cur.fetchall()
@@ -255,7 +232,7 @@ class ChatConsumer(WebsocketConsumer):
         Status = event['task_status']
         by = event['acceptedBy']
         createdby = event['createdby']
-        print("", event)
+
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({

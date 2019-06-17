@@ -45,7 +45,7 @@ def getmytasksquota(request,username):
 
 def getNextTask(request):
     cur = engine.cursor(cursor_factory=RealDictCursor)
-    cur.execute("select * from task where task_status = 'New' order by priority , creation_date desc limit 1; ")
+    cur.execute("select * from task where task_status = 'New' order by  creation_date , priority  desc limit 1; ")
     res = cur.fetchall()
     cur.close()
     if(len(res)>0):

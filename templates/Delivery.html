@@ -134,7 +134,6 @@
     function getTaskQuota() {
       var xmlHttp = new XMLHttpRequest();
       var theUrl = 'http://3.83.129.144:8000/api/getmytasksquota/'+userName+'/';
-      console.log("URL "+theUrl);
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
       taskQuota = parseInt(xmlHttp.responseText, 10);
@@ -186,7 +185,7 @@ var dataArr = data.split('#');
 
 // } else
  if (dataArr[0] == 'Completed') {
-  console.log(dataArr);
+
   chatSocket.send(JSON.stringify({
     'message': 'Task Update',
     'from': 'DeliveryAgent',
@@ -206,7 +205,7 @@ var dataArr = data.split('#');
     'createdby' : dataArr[2] 
   });
 } else if (dataArr[0] == 'Declined') {
-  console.log(dataArr);
+
   chatSocket.send(JSON.stringify({
     'message': 'Task Update',
     'title': dataArr[1],
@@ -240,7 +239,6 @@ var dataArr = data.split('#');
       xmlHttp.send(null);
       var rowDataTask = JSON.parse(xmlHttp.responseText)
       $('#MainTask').find('tbody').empty();
-      // console.log(rowDataTask['priority']);
       if (!jQuery.isEmptyObject(rowDataTask)) {
         var count = Object.keys(rowDataTask).length;
 
@@ -255,9 +253,7 @@ var dataArr = data.split('#');
           taskPriority = 'HIGH'
         }
         var Action = '';
-        // console.log(rowDataTask['task_status'])
         if (rowDataTask['task_status'] == 'New') {
-          console.log("New")
           Action = '<button type="button" class="btn btn-success" onclick="acceptTask()">Accept</button>';
         }
 
@@ -278,32 +274,28 @@ var dataArr = data.split('#');
 
 
     var chatSocket = new WebSocket('ws://3.83.129.144:8000/ws/chat/TaskStore/');
-    // console.log(chatSocket);
-    console.log("=====>> " + chatSocket.readyState)
     chatSocket.onmessage = function (e) {
       if (lastTask == '') {
         var data = JSON.parse(e.data);
         lastTask = data;
         var message = data['message'];
-        // document.querySelector('#chat-log').value += (message + '\n');
         console.log(data)
         $('#MainTask').find('tbody').empty();
         $('#MainTask').find('tbody').append(' <tr><td>' + data['title'] + '</td><td>' + data['priority'] + '</td> <td>' + data['creationDate'] + '</td> <td><button type="button" onclick="acceptTask()" class="btn btn-success">Accept</button></td></tr>');
       } else {
         var data = JSON.parse(e.data);
         console.log(data)
-        console.log(lastTask['priority']);
         if (parseInt(lastTask['priority'], 10) <= parseInt(data['priority'], 10) || data['message'] == 'Next High Task') {
           lastTask = data;
-          console.log('New Task is here');
-          console.log(data);
+
+
           if (data['title'] == '' && data['priority'] == '' && data['creationDate'] == '') {
             $('#MainTask').find('tbody').empty();
             lastTask = ''
           } else {
             $('#MainTask').find('tbody').empty();
             $('#MainTask').find('tbody').append(' <tr><td>' + data['title'] + '</td><td>' + data['priority'] + '</td> <td>' + data['creationDate'] + '</td> <td><button type="button" class="btn btn-success" onclick="acceptTask()">Accept</button></td></tr>');
-            console.log('------------------------------------------------------------------------------------');
+           
           }
         }
         // else(lastTask['priority']=='Medium')
@@ -319,45 +311,9 @@ var dataArr = data.split('#');
     };
 
 
-    // document.querySelector('#submit-btn').onclick = function(e) {
-    //   var date = new Date();
-    // var timestamp = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-
-    //     var messageInputDom = document.querySelector('#title');
-    //     var title = messageInputDom.value;
-    //     var messageInputDom = document.querySelector('#Priority');
-    //     var Priority = messageInputDom.value;
-    //     var messageInputDom = document.querySelector('#TaskState');
-    //     var TaskState = messageInputDom.value;
-    //     var createdBy = '{'
-    //     chatSocket.send(JSON.stringify({
-    //         'message': 'Testing',
-    //         'title':title,
-    //         'Priority':Priority,
-    //         'State':TaskState,
-    //         'creationDate' : timestamp,
-    //         'createdBy':userName,
-    //         'from':'Store',
-    //         'acceptedBy':''
-    //     }));
-
-    //     console.log(JSON.stringify({
-    //       'message': 'Testing',
-    //         'title':title,
-    //         'Priority':Priority,
-    //         'State':TaskState,
-    //         'creationDate' : timestamp,
-    //         'createdBy':userName,
-    //         'acceptedBy':''
-    //     }));
-    //     $('#Main-table').find('tbody').append(' <tr><td>'+title+'</td><td>'+Priority+'</td> <td>'+timestamp+'</td> <td>'+TaskState+'</td></tr>');
-    // };
-
-
-
+  
     function acceptTask() {
       taskQuota++;
-      console.log("acceptTask Called()");
       var deliveryAgentName = '{{ Username }}';
 
 

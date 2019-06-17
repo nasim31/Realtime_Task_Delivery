@@ -14,7 +14,7 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script>
-   
+
 
   </script>
 
@@ -78,10 +78,10 @@
               </select>
             </div>
           </div>
-         
+
           <div>
             <button type="submit" id="submit-btn" class="btn btn-success">Create New Task</button>
-          
+
           </div>
 
         </div>
@@ -108,34 +108,34 @@
     function filltable() {
       $('#Main-table').find('tbody').empty();
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://3.83.129.144:8000/api/getmytasks/'+userName+'/';
+      var theUrl = 'http://3.83.129.144:8000/api/getmytasks/' + userName + '/';
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
-    var rowData = JSON.parse(xmlHttp.responseText)
+      var rowData = JSON.parse(xmlHttp.responseText)
       if (!jQuery.isEmptyObject(rowData)) {
-      var count = Object.keys(rowData).length;
-      for (let index = 0; index < count; index++) {
-        var newData = rowData[index];
-        var taskPriority = '';
-        if (newData['priority'] == '1') {
-          taskPriority = 'LOW'
-        } else if (newData['priority'] == '2') {
-          taskPriority = 'MEDIUM'
-        } else if (newData['priority'] == '3') {
-          taskPriority = 'HIGH'
-        }
-        var Action = '';
-        console.log(newData['task_status'])
-        if (newData['task_status'] == 'New') {
-          console.log("New")
-          Action = '<button type="button" class="btn btn-danger" onClick=\'CancelTask("'+newData['title']+'")\'">Cancel Task</button>';
-        }
+        var count = Object.keys(rowData).length;
+        for (let index = 0; index < count; index++) {
+          var newData = rowData[index];
+          var taskPriority = '';
+          if (newData['priority'] == '1') {
+            taskPriority = 'LOW'
+          } else if (newData['priority'] == '2') {
+            taskPriority = 'MEDIUM'
+          } else if (newData['priority'] == '3') {
+            taskPriority = 'HIGH'
+          }
+          var Action = '';
 
-       
-        $('#Main-table').find('tbody').append(' <tr><td>' + newData['title'] + '</td><td>' + taskPriority + '</td> <td>' + newData['creation_date'] + '</td> <td>' + newData['task_status'] + '</td><td>' + Action + '</td></tr>');
+          if (newData['task_status'] == 'New') {
 
+            Action = '<button type="button" class="btn btn-danger" onClick=\'CancelTask("' + newData['title'] + '")\'">Cancel Task</button>';
+          }
+
+
+          $('#Main-table').find('tbody').append(' <tr><td>' + newData['title'] + '</td><td>' + taskPriority + '</td> <td>' + newData['creation_date'] + '</td> <td>' + newData['task_status'] + '</td><td>' + Action + '</td></tr>');
+
+        }
       }
-    }
     }
 
 
@@ -143,40 +143,40 @@
     //   'ws://' + window.location.host +
     //   '/ws/chat/' + roomName + '/');
     function CancelTask(id) {
-      console.log("Task Id "+id);
+
 
 
       var xhr = new XMLHttpRequest();
-        var url = "http://3.83.129.144:8000/api/deleteTask";
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var json = JSON.parse(xhr.responseText);
-                console.log(json);
+      var url = "http://3.83.129.144:8000/api/deleteTask";
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var json = JSON.parse(xhr.responseText);
+          console.log(json);
 
-                chatSocket.send(JSON.stringify({
-        'message': 'Refresh Task',
-        'from': 'Store',
+          chatSocket.send(JSON.stringify({
+            'message': 'Refresh Task',
+            'from': 'Store',
 
-      }));
+          }));
 
-      console.log({
-        'message': 'Refresh Task',
-        'from': 'Store',
+          console.log({
+            'message': 'Refresh Task',
+            'from': 'Store',
 
-      });
-
-
-
-            }
-        };
-        var dataPost = JSON.stringify({"TaskId":id});
-        xhr.send(dataPost);
-        // console.log(JSON.parse(xhr.responseText));
+          });
 
 
-       
+
+        }
+      };
+      var dataPost = JSON.stringify({ "TaskId": id });
+      xhr.send(dataPost);
+
+
+
+
     }
 
 
@@ -184,16 +184,14 @@
 
 
 
-   
-    // console.log(chatSocket);
-    // console.log("=====>> " + chatSocket.readyState)
+
+
     chatSocket.onmessage = function (e) {
       var data = JSON.parse(e.data);
       var message = data['message'];
-      // document.querySelector('#chat-log').value += (message + '\n');
       console.log(data)
-      if(message=='DeclinedNotification' && data['createdby'] == userName ){
-        alert("Your task "+data['title']+" is declined by the delivery agent "+data['acceptedBy']);
+      if (message == 'DeclinedNotification' && data['createdby'] == userName) {
+        alert("Your task " + data['title'] + " is declined by the delivery agent " + data['acceptedBy']);
       }
 
 
@@ -226,7 +224,7 @@
 
       var messageInputDom = document.querySelector('#title');
       var title = messageInputDom.value;
-      messageInputDom.value='';
+      messageInputDom.value = '';
       var messageInputDom = document.querySelector('#Priority');
       var Priority = messageInputDom.value;
       // var messageInputDom = document.querySelector('#TaskState');
@@ -261,7 +259,7 @@
         taskPriority = 'HIGH'
       }
 
-      Action = '<button type="button" class="btn btn-danger" onClick=\'CancelTask("'+title+'")\' >Cancel Task</button>';
+      Action = '<button type="button" class="btn btn-danger" onClick=\'CancelTask("' + title + '")\' >Cancel Task</button>';
 
       deleteTask = title;
 
@@ -271,7 +269,7 @@
 
 
 
-     
+
 
       // filltable();
 
