@@ -303,6 +303,7 @@ var dataArr = data.split('#');
           } else {
             $('#MainTask').find('tbody').empty();
             $('#MainTask').find('tbody').append(' <tr><td>' + data['title'] + '</td><td>' + data['priority'] + '</td> <td>' + data['creationDate'] + '</td> <td><button type="button" class="btn btn-success" onclick="acceptTask()">Accept</button></td></tr>');
+            console.log('------------------------------------------------------------------------------------');
           }
         }
         // else(lastTask['priority']=='Medium')
