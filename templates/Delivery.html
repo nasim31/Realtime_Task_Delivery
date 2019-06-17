@@ -295,6 +295,8 @@ var dataArr = data.split('#');
         console.log(lastTask['priority']);
         if (parseInt(lastTask['priority'], 10) <= parseInt(data['priority'], 10) || data['message'] == 'Next High Task') {
           lastTask = data;
+          console.log('New Task is here');
+          console.log(data);
           if (data['title'] == '' && data['priority'] == '' && data['creationDate'] == '') {
             $('#MainTask').find('tbody').empty();
             lastTask = ''
