@@ -24,7 +24,7 @@
 
 
     </div>
-    <button class="btn btn-danger" onclick="window.location.href ='http://3.83.129.144:8000'">Logout</button>
+    <button class="btn btn-danger" onclick="window.location.href ='http://35.168.60.242:8000'">Logout</button>
   </nav>
 
   <!-- Page Content -->
@@ -133,7 +133,7 @@
 
     function getTaskQuota() {
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://3.83.129.144:8000/api/getmytasksquota/'+userName+'/';
+      var theUrl = 'http://35.168.60.242:8000/api/getmytasksquota/'+userName+'/';
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
       taskQuota = parseInt(xmlHttp.responseText, 10);
@@ -142,7 +142,7 @@
 
     function filltable() {
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://3.83.129.144:8000/api/getmytasks/'+userName+'/';
+      var theUrl = 'http://35.168.60.242:8000/api/getmytasks/'+userName+'/';
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
       $('#Main-table').find('tbody').empty();
@@ -234,7 +234,7 @@ var dataArr = data.split('#');
       if(taskQuota<3){
 
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://3.83.129.144:8000/api/getnexttask';
+      var theUrl = 'http://35.168.60.242:8000/api/getnexttask';
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
       var rowDataTask = JSON.parse(xmlHttp.responseText)
@@ -273,7 +273,7 @@ var dataArr = data.split('#');
 
 
 
-    var chatSocket = new WebSocket('ws://3.83.129.144:8000/ws/chat/TaskStore/');
+    var chatSocket = new WebSocket('ws://35.168.60.242:8000/ws/chat/TaskStore/');
     chatSocket.onmessage = function (e) {
       if (lastTask == '') {
         var data = JSON.parse(e.data);

@@ -29,7 +29,7 @@
 
 
     </div>
-    <button class="btn btn-danger" onclick="window.location.href ='http://3.83.129.144:8000'">Logout</button>
+    <button class="btn btn-danger" onclick="window.location.href ='http://35.168.60.242:8000'">Logout</button>
   </nav>
 
   <!-- Page Content -->
@@ -108,7 +108,7 @@
     function filltable() {
       $('#Main-table').find('tbody').empty();
       var xmlHttp = new XMLHttpRequest();
-      var theUrl = 'http://3.83.129.144:8000/api/getmytasks/' + userName + '/';
+      var theUrl = 'http://35.168.60.242:8000/api/getmytasks/' + userName + '/';
       xmlHttp.open("GET", theUrl, false); // false for synchronous request
       xmlHttp.send(null);
       var rowData = JSON.parse(xmlHttp.responseText)
@@ -147,7 +147,7 @@
 
 
       var xhr = new XMLHttpRequest();
-      var url = "http://3.83.129.144:8000/api/deleteTask";
+      var url = "http://35.168.60.242:8000/api/deleteTask";
       xhr.open("POST", url, true);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.onreadystatechange = function () {

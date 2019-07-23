@@ -3,7 +3,7 @@ import json
 from websocket import create_connection
 
 
-ws = create_connection("ws://127.0.0.1:8000/ws/chat/TaskStore/")
+ws = create_connection("ws://35.168.60.242:8000/ws/chat/TaskStore/")
 
 
 def callback(ch, method, properties, body):
@@ -13,7 +13,7 @@ def callback(ch, method, properties, body):
     try:
         ws.send(str(data).replace('\'', '\"'))
     except:
-        ws = create_connection("ws://127.0.0.1:8000/ws/chat/TaskStore/")
+        ws = create_connection("ws://35.168.60.242:8000/ws/chat/TaskStore/")
         ws.send(str(data).replace('\'', '\"'))
 
 
