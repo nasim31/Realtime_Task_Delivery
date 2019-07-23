@@ -22,3 +22,8 @@ Once task is accepted by a delivery agent it will be removed from all other deli
 | akshat2|akshat@1234|Delivery Agent|
 
 # Deployment URL
+http://35.168.60.242:8000
+
+# Support
+Please feel free to contact me for any kind of Questions/Suggestions about the project.
+<br>Mail ID : akshat.khanna@st.niituniversity.in 
